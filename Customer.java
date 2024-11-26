@@ -32,7 +32,7 @@ public class Customer{
    }
 
    public void setAddress(String address){
-      this.name = name;
+      this.address = address;
    }
    
    public String getAddress(){
@@ -46,4 +46,9 @@ public class Customer{
    public int getIdNumber(){
       return this.IdNum;
    }
+   
+  public String toString(){
+   return "Name: " + getName()+ "\nAge: " + getAge() + "\nGender: " + getGender() + "\nAddress: " + getAddress() + "\nID Number: " +getIdNumber();
+  }
+   
 }
