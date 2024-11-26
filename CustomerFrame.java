@@ -13,15 +13,18 @@ public class CustomerFrame extends JFrame implements ActionListener{
    //Texts
    JTextField Name = new JTextField("Name", 20);
    JTextField Age = new JTextField("Age", 20);
-   JTextField Gender = new JTextField("Gender", 20);
    JTextField Address = new JTextField("Address", 20);
    JTextField IdNumber = new JTextField("IdNumber", 20);
+   
+   //Checkbox
+   ButtonGroup Gender = new ButtonGroup();
+   JLabel GLabel = new JLabel("Choose One");
+   JCheckBox Male = new JCheckBox("Male");
+   JCheckBox Female = new JCheckBox("Female");
+   
    //Buttons
-   JButton NameBtn = new JButton("Enter");
-   JButton AgeBtn = new JButton("Enter");
-   JButton GenderBtn = new JButton("Enter");
-   JButton AddressBtn = new JButton("Enter");
-   JButton IdNumberBtn = new JButton("Enter");
+   JButton Save = new JButton("Save");
+   JButton Edit = new JButton("Edit");
    
    
    JPanel p = new JPanel();
@@ -31,26 +34,25 @@ public class CustomerFrame extends JFrame implements ActionListener{
       this.setSize(1000,600);
       this.setLocationRelativeTo(null);
       this.setLayout(new BorderLayout());
-      this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+      this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
       
+      Gender.add(Male);
+      Gender.add(Female);
       
-      
+      p.add(label);
       p.add(Name);
-      p.add(NameBtn);
       p.add(Age);
-      p.add(AgeBtn);
-      p.add(Gender);
-      p.add(GenderBtn);
+      p.add(GLabel);
+      p.add(Male);
+      p.add(Female);
       p.add(Address);
-      p.add(AddressBtn);
       p.add(IdNumber);
-      p.add(IdNumberBtn);
+      p.add(Save);
+      p.add(Edit);
+      label.setVisible(false);
       
-      NameBtn.addActionListener(this);
-      AgeBtn.addActionListener(this);
-      GenderBtn.addActionListener(this);
-      AddressBtn.addActionListener(this);
-      IdNumberBtn.addActionListener(this);
+      Save.addActionListener(this);
+      Edit.addActionListener(this);
       
       p.setBounds(340,200, 300, 137);
       p.setLayout(new FlowLayout(1, 20, 10));
@@ -59,41 +61,76 @@ public class CustomerFrame extends JFrame implements ActionListener{
    }
    
    public void actionPerformed(ActionEvent e){
-      //name btn
-      if(e.getSource() == NameBtn){
+   
+      //Save
+      if(e.getSource() == Save){
+         boolean valid = true;
+         //name
          customer.setName(Name.getText());
-         System.out.print(customer.getName());
-      }
-      //age btn
-      else if(e.getSource() == AgeBtn){
          try{
+            //age
             customer.setAge(Integer.parseInt(Age.getText()));
-            System.out.print(customer.getAge());
+            if(Integer.parseInt(Age.getText()) < 17 || Integer.parseInt(Age.getText()) > 85){
+               throw new ArithmeticException();
+            }
+         }
+         
+         catch(ArithmeticException ae){
+            Age.setText("Please Enter A Valid Age");
+            valid = false;
          }
          catch(NumberFormatException nfe){
-            Age.setText("Please Input A Number");
+            Age.setText("Please Enter A Number");
+            valid = false;
          }
-      }
-      //gender btn
-      else if(e.getSource() == GenderBtn){
-         //customer.setGender(Gender.getText(0));
-         System.out.print(customer.getGender());
-      }
-      //address btn
-      else if(e.getSource() == AddressBtn){
+         //gender
+         if(Male.isSelected()){
+            customer.setGender('M');
+         }            
+         else if(Female.isSelected()){
+            customer.setGender('F');
+         }
+         else{
+            valid = false;
+         }
+         //address
          customer.setAddress(Address.getText());
-         System.out.print(customer.getAddress());
-      }
-      //id btn
-      else if(e.getSource() == IdNumberBtn){
+      
          try{
             customer.setIdNumber(Integer.parseInt(IdNumber.getText()));
-            System.out.print(customer.getIdNumber());
+            if (customer.getIdNumber() <= 0) {
+               throw new NumberFormatException();
+            }
          }
          catch(NumberFormatException nfe){
-            IdNumber.setText("Please A Valid License Number");
+            IdNumber.setText("Please Enter A Valid License Number");
+            valid = false;
          }
+         
+         if (valid) {
+            label.setText("<html>" + customer.toString().replace("\n", "<br>") + "</html>");
+            toggleVisibility(false); 
+            label.setVisible(true);
+         } else {
+            toggleVisibility(true); 
+            label.setVisible(false);
+         }         
       }
+      
+      else if(e.getSource() == Edit){
+         toggleVisibility(true); 
+         label.setVisible(false);
+      }
+   }
+   private void toggleVisibility(boolean isVisible) {
+      Name.setVisible(isVisible);
+      Age.setVisible(isVisible);
+      GLabel.setVisible(isVisible);
+      Male.setVisible(isVisible);
+      Female.setVisible(isVisible);
+      Address.setVisible(isVisible);
+      IdNumber.setVisible(isVisible);
+      Save.setVisible(isVisible);
    }
    
 }
