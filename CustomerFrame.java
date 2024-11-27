@@ -3,12 +3,20 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.nio.file.*;
+import java.nio.file.StandardOpenOption.*;
 
 public class CustomerFrame extends JFrame implements ActionListener{
    Font f = new Font("Berlin Sans FB", 0, 17);
    JLabel label = new JLabel();
    JLabel logo = new JLabel();
    Customer customer = new Customer();
+   
+   
+   
+   String filepath = "C:\\Users\\Ivan Cortes\\Documents\\joswa\\customer.txt";
+   File file = new File(filepath);
    
    //Texts
    JTextField Name = new JTextField("Name", 20);
@@ -107,14 +115,34 @@ public class CustomerFrame extends JFrame implements ActionListener{
             valid = false;
          }
          
+         
          if (valid) {
             label.setText("<html>" + customer.toString().replace("\n", "<br>") + "</html>");
+            try
+            {
+               FileWriter fw = new FileWriter(file);
+               BufferedWriter bufferedWriter = new BufferedWriter(fw);
+               
+               fw.write(customer.getName() + "," + customer.getAge() + "," + customer.getGender() + "," + customer.getAddress() + "," + customer.getIdNumber() + "\n");
+               bufferedWriter.append(System.getProperty("line.separator"));
+
+               fw.close();
+               bufferedWriter.close();
+
+               
+            }
+         catch(Exception easd)
+         {
+         
+         }
             toggleVisibility(false); 
             label.setVisible(true);
          } else {
             toggleVisibility(true); 
             label.setVisible(false);
-         }         
+         }  
+         
+                
       }
       
       else if(e.getSource() == Edit){
