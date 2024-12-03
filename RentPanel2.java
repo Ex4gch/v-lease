@@ -31,8 +31,8 @@ public class RentPanel2 extends JPanel implements ItemListener, ActionListener
    JLabel Ldays = new JLabel("DAYS : ");
    JButton calcBtn = new JButton("CALCULATE");
    
-   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-   JComboBox<vehicles> Tvehicle = new JComboBox<>();
+   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:MM");
+   
    JTextField Tdays = new JTextField(7);
    
    JPanel pcustomer = new JPanel();
@@ -44,21 +44,24 @@ public class RentPanel2 extends JPanel implements ItemListener, ActionListener
    
    JPanel pthis = this;
    
-   String[] customers = {"JOSHUA", "IVAN", "DANIEL", "LOUIS"};
    
    String str = "                SUMMARY\n";
    String str2 = "";
    String str3 = "";
-   
-   vehicles[] vehi;
-   JComboBox<String> Tcustomer = new JComboBox<>(customers);
    JTextArea jta = new JTextArea(12,15);
    
    double rate = 0;
    
    String vehiclefile = "C:\\Users\\jennifer\\Desktop\\John's\\java\\swing\\Project\\vehicles.txt";
    String rentfile = "C:\\Users\\jennifer\\Desktop\\John's\\java\\swing\\Project\\rent.txt";
+   String customerfile = "C:\\Users\\jennifer\\Desktop\\John's\\java\\swing\\Project\\customer.txt";
    File file = new File(vehiclefile);
+   
+   String[] customers;
+   vehicles[] vehi;
+   JComboBox<String> Tcustomer = new JComboBox<String>();
+   JComboBox<vehicles> Tvehicle = new JComboBox<vehicles>();
+   
    public RentPanel2()
    {   
       Border blackline = BorderFactory.createLineBorder(Color.black);
@@ -93,8 +96,10 @@ public class RentPanel2 extends JPanel implements ItemListener, ActionListener
                Tvehicle.addItem(vehi[j]);
                j++;
             }
+            Tvehicle = new JComboBox<vehicles>(vehi); 
          }
           
+         
          bf.close();
       
       }
@@ -102,6 +107,31 @@ public class RentPanel2 extends JPanel implements ItemListener, ActionListener
       {
       
       }
+      
+      try
+      {
+         BufferedReader bf = new BufferedReader(new FileReader(new File(customerfile)));
+         
+         Object[] lines = bf.lines().toArray();
+         customers = new String[lines.length];
+         Customer vtemp;
+         
+         for(int i = 0; i < lines.length; i++)
+         {
+            String line = lines[i].toString().trim();
+            String[] att = line.split(",");
+           
+            customers[i] = att[0];
+            Tcustomer.addItem(customers[i]);
+         }
+          bf.close();
+ 
+      }
+      catch(Exception e)
+      {
+      
+      }
+
       label.add(backBtn);
       backBtn.setBounds(5,5,40,40);
       backBtn.setIcon(new ImageIcon(new ImageIcon("back.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
@@ -291,12 +321,11 @@ public class RentPanel2 extends JPanel implements ItemListener, ActionListener
          return;
       }
       
-      LocalDate beginDate = LocalDate.now();
+      LocalDateTime beginDate = LocalDateTime.now();
       String date = beginDate.format(formatter);
-      LocalDate endDate = beginDate.plusDays(Integer.parseInt(Tdays.getText()));
+      LocalDateTime endDate = beginDate.plusDays(Integer.parseInt(Tdays.getText()));
       String date2 = endDate.format(formatter);
             
-   
       if(e.getSource() == calcBtn)
       {
          if(Tdays.getText().equals(""))

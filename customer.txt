@@ -1,0 +1,4 @@
+DONAL,23,MALE,fankaskd,12312,back.png
+SHAVHER,23,MALE,12312,1231123,back.png
+DONAL,23,MALE,wdqwdwq,23231,back.png
+IVAN,23,MALE,UMAPAD,3123,back.png

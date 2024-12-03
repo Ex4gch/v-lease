@@ -1,11 +1,41 @@
 import java.util.*;
 
-public class Customer{
+public class Customer
+{
    private String name;
-   private int age;
-   private char gender;
+   private String age;
+   private String gender;
    private String address;
-   private int IdNum;
+   private String IdNum;
+   private String img;
+   
+   public Customer(String name, String age, String gender, String address, String IdNum, String img)
+   {
+      this.name = name;
+      this.age = age;
+      this.gender = gender;
+      this.address = address;
+      this.img = img;
+      this.IdNum = IdNum;
+   }
+   
+   
+   public Customer()
+   {
+   
+   }
+   
+   
+   public String getImg()
+   {
+      return this.img;
+   }
+   
+   public void setImg(String img)
+   {
+      this.img = img;
+   }
+   
    
    public void setName(String name){
       this.name = name;
@@ -15,19 +45,19 @@ public class Customer{
       return this.name;
    }
    
-   public void setAge(int age){
+   public void setAge(String age){
       this.age = age;
    }
    
-   public int getAge(){
+   public String getAge(){
       return this.age;
    }
 
-   public void setGender(char gender){
+   public void setGender(String gender){
       this.gender = gender;
    }
    
-   public char getGender(){
+   public String getGender(){
       return this.gender;
    }
 
@@ -39,11 +69,11 @@ public class Customer{
       return this.address;
    }
 
-   public void setIdNumber(int IdNum){
+   public void setIdNumber(String IdNum){
       this.IdNum = IdNum;
    }
    
-   public int getIdNumber(){
+   public String getIdNumber(){
       return this.IdNum;
    }
    

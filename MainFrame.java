@@ -4,7 +4,7 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class MainPanel extends JPanel implements ActionListener
+public class MainFrame extends JFrame implements ActionListener
 {
    ImageIcon img = new ImageIcon("v-Lease3.png");
    Font f = new Font("Berlin Sans FB", 0, 17);
@@ -19,24 +19,32 @@ public class MainPanel extends JPanel implements ActionListener
    VehicleFrame vf = new VehicleFrame();
    RentFrame rf = new RentFrame();
       
-   public MainPanel()
+   public MainFrame()
    {   
+      
       Border blackline = BorderFactory.createLineBorder(Color.black);
    
+      this.setTitle("V-Lease");
       this.setSize(1000,600);
+      this.setLocationRelativeTo(null);
+      this.setLayout(new BorderLayout());
+      this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
       
       logo.setIcon(new ImageIcon(new ImageIcon("v-Lease2.png").getImage().getScaledInstance(200 , 200, Image.SCALE_SMOOTH)));
       logo.setBounds(390, 20, 200, 200);      
+      
+      this.setIconImage(img.getImage());
+      this.setResizable(false);
       
       label.setIcon(new ImageIcon(new ImageIcon("bg2.jpg").getImage().getScaledInstance(1000, 600, Image.SCALE_SMOOTH)));
       label.setBounds(0,0, 1000,600);
      
       p.add(vehicleBtn);
-      p.add(customerBtn);
       p.add(rentBtn);
       p.add(returnBtn);
+      p.add(customerBtn);
       
-      p.setBounds(340,200, 300, 200);
+      p.setBounds(340,220, 300, 200);
       p.setLayout(new FlowLayout(1, 20, 10));
       p.setOpaque(false);
       
@@ -60,7 +68,6 @@ public class MainPanel extends JPanel implements ActionListener
       customerBtn.addActionListener(this);
       customerBtn.setBackground(Color.decode("#d3d3d3"));
       
-      customerBtn.addActionListener(this);
       vehicleBtn.addActionListener(this);
       rentBtn.addActionListener(this);
       
@@ -82,7 +89,19 @@ public class MainPanel extends JPanel implements ActionListener
    @Override
    public void actionPerformed(ActionEvent e)
    {
-     
+      if(e.getSource() == vehicleBtn)
+      {
+         vf.setVisible(true);
+         this.dispose();
+         
+      }
+      
+      if(e.getSource() == rentBtn)
+      {
+         this.dispose();
+         rf.setVisible(true);
+         
+      }
    }
    
    public void hover(JButton b)

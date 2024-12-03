@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.plaf.metal.*;
 
-public class VehiclePanel2 extends JPanel implements ItemListener, ActionListener
+public class VehicleFrame extends JFrame implements ItemListener, ActionListener
 {
    ImageIcon img = new ImageIcon("v-Lease3.png");
    Font f = new Font("Berlin Sans FB", 0, 17);
@@ -27,6 +27,8 @@ public class VehiclePanel2 extends JPanel implements ItemListener, ActionListene
    JPanel innerWestPanel = new JPanel();
    JPanel innerEastPanel = new JPanel();
     
+   Container c = getContentPane();
+   
    JButton addBtn = new JButton("ADD VEHICLE");
    JButton cancelBtn = new JButton("CANCEL");
    JButton editBtn = new JButton("EDIT");
@@ -34,7 +36,6 @@ public class VehiclePanel2 extends JPanel implements ItemListener, ActionListene
    JButton saveBtn = new JButton("SAVE");
    JButton backBtn = new JButton();
    
-   JPanel thisp = this;
    vehicles[] vehi;
    JComboBox<vehicles> cb = new JComboBox<vehicles>();
    
@@ -43,7 +44,7 @@ public class VehiclePanel2 extends JPanel implements ItemListener, ActionListene
    
    File file = new File(filename);
    
-   public VehiclePanel2()
+   public VehicleFrame()
    {        
       
       Border blackline = BorderFactory.createLineBorder(Color.black);
@@ -69,7 +70,6 @@ public class VehiclePanel2 extends JPanel implements ItemListener, ActionListene
          {
             String line = lines[i].toString().trim();
             String[] att = line.split(",");
-            
             if(att[4].equals("VAN")) vtemp = new Van();
             else if(att[4].equals("SUV")) vtemp = new SUV();
             else if(att[4].equals("MINIVAN")) vtemp = new Minivan();
@@ -194,7 +194,14 @@ public class VehiclePanel2 extends JPanel implements ItemListener, ActionListene
       v.setOpaque(false);
       title.setFont(new Font("Berlin Sans FB", 0, 30));
    
+      this.setTitle("V-Lease");
       this.setSize(1000,600);
+      
+      this.setLocationRelativeTo(null);
+      this.setLayout(new BorderLayout());
+      this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+      this.setIconImage(img.getImage());
+      this.setResizable(false);
         
       logo.setIcon(new ImageIcon(new ImageIcon("carbg.png").getImage().getScaledInstance(700 , 400, Image.SCALE_SMOOTH)));
       logo.setBounds(100, 900, 700, 400);
@@ -239,6 +246,7 @@ public class VehiclePanel2 extends JPanel implements ItemListener, ActionListene
    @Override
    public void actionPerformed(ActionEvent e)
    {
+      saveBtn.setFocusable(true);
       if(e.getSource() == addBtn|| e.getSource() == editBtn)
       {
          VehiclePanel newV = new VehiclePanel("","","","AVAILABLE", new Van());
@@ -251,6 +259,7 @@ public class VehiclePanel2 extends JPanel implements ItemListener, ActionListene
          else
          {
             vehicles vehi2 = new vehicles();
+            
             try
             {
                BufferedReader bf = new BufferedReader(new FileReader(file));
@@ -318,6 +327,7 @@ public class VehiclePanel2 extends JPanel implements ItemListener, ActionListene
          
          
          cb.setEnabled(false);
+         
          innerSouthPanel.add(saveBtn);
          innerSouthPanel.add(cancelBtn);
          innerCenterPanel.add(newV);
@@ -328,13 +338,7 @@ public class VehiclePanel2 extends JPanel implements ItemListener, ActionListene
                @Override
                public void actionPerformed(ActionEvent ex)
                {
-                  boolean isAllowed = false;
-                  
-                  if(newV.Tmodel.getText().equals("")) isAllowed = true;
-                  else if(newV.TplateNumber.getText().equals("")) isAllowed = true;
-                  else if(imgpath.equals("")) isAllowed = true;
-                  
-                  if(isAllowed)
+                  if((newV.Tmodel.getText().equals("") || newV.TplateNumber.getText().equals("") || imgpath.equals("")))
                   {
                      JOptionPane.showMessageDialog(null,"Wlay Sud imng input waa ka");
                      return;
@@ -421,25 +425,25 @@ public class VehiclePanel2 extends JPanel implements ItemListener, ActionListene
                      }
                      
                      JOptionPane.showMessageDialog(null,"HALA NA SAVE SYA!!");
-                     cb.addItem(new vehicles(newV.getSmodel(), imgpath, newV.getSplateNumber(), newV.getSstatus(), newV.getStype()));
-                     cb.setSelectedIndex(-1);
                      cb.setEnabled(true);
                      innerCenterPanel.removeAll();
                      innerSouthPanel.removeAll();
                      innerCenterPanel.revalidate();
                      innerCenterPanel.repaint();
+                     cb.addItem(new vehicles(newV.getSmodel(), imgpath, newV.getSplateNumber(), newV.getSstatus(), newV.getStype()));
+                     cb.setSelectedIndex(-1);
                      innerSouthPanel.add(addBtn);
                      innerSouthPanel.add(editBtn);
                      innerSouthPanel.add(deleteBtn);
                      editBtn.setVisible(false);
                      deleteBtn.setVisible(false);
+                  
                      cb.revalidate();
                      cb.repaint();
-                     thisp.repaint();
-                     thisp.revalidate();
+                     c.repaint();
+                     c.revalidate();
                      innerSouthPanel.revalidate(); 
                      innerSouthPanel.repaint();
-                     saveBtn.removeActionListener(this);
                      return;
                   }
                   
@@ -481,10 +485,10 @@ public class VehiclePanel2 extends JPanel implements ItemListener, ActionListene
                }
             });
          newV.p1.add(addPic);
-         ;
+         saveBtn.removeActionListener(this);v
          this.repaint();
          this.revalidate();
-         return;
+         
       }
    
       if(e.getSource() == cancelBtn)
@@ -563,7 +567,14 @@ public class VehiclePanel2 extends JPanel implements ItemListener, ActionListene
          this.repaint();
       }
       
-     
+      if(e.getSource() == backBtn)
+      {
+         this.dispose();
+         MainFrame m = new MainFrame();
+         m.setVisible(true);
+         
+      }
+      
    }
    
    public void hover(JButton b)

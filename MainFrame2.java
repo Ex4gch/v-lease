@@ -10,6 +10,7 @@ public class MainFrame2 extends JFrame implements ActionListener
    MainPanel m = new MainPanel();   
    Container p = this.getContentPane();
    RentPanel2 r = new RentPanel2();
+   CustomerPanel cm = new CustomerPanel();
    
    public MainFrame2()
    {
@@ -20,9 +21,11 @@ public class MainFrame2 extends JFrame implements ActionListener
       this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
       this.add(m,"a");
       this.add(r,"b");
+      this.add(cm,"d");
       
       m.vehicleBtn.addActionListener(this);
       m.rentBtn.addActionListener(this);
+      m.customerBtn.addActionListener(this);
       
       this.setVisible(true);
    }
@@ -63,6 +66,24 @@ public class MainFrame2 extends JFrame implements ActionListener
             );
 
          c.show(p,"c");
+      }
+      
+      if(e.getSource() == m.customerBtn)
+      {
+         cm = new CustomerPanel();
+         this.add(cm,"d");
+         c.show(p,"d");
+         cm.backBtn.addActionListener(
+            new ActionListener()
+            {
+               @Override
+               public void actionPerformed(ActionEvent ex)
+               {
+                  c.show(p,"a");
+               }
+            }
+            );
+         c.show(p,"d");
       }
    }
 }

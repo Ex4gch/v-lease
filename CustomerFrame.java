@@ -1,5 +1,7 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -8,15 +10,18 @@ import java.nio.file.*;
 import java.nio.file.StandardOpenOption.*;
 
 public class CustomerFrame extends JFrame implements ActionListener{
+   String filepath = "C:\\Users\\jennifer\\Desktop\\John's\\java\\swing\\Project\\customer.txt";
+   File file = new File(filepath);
+   
+   ImageIcon img = new ImageIcon("v-Lease2.png");
+   
+   
    Font f = new Font("Berlin Sans FB", 0, 17);
    JLabel label = new JLabel();
    JLabel logo = new JLabel();
    Customer customer = new Customer();
    
-   
-   
-   String filepath = "C:\\Users\\Ivan Cortes\\Documents\\joswa\\customer.txt";
-   File file = new File(filepath);
+
    
    //Texts
    JTextField Name = new JTextField("Name", 20);
@@ -32,8 +37,7 @@ public class CustomerFrame extends JFrame implements ActionListener{
    
    //Buttons
    JButton Save = new JButton("Save");
-   JButton Edit = new JButton("Edit");
-   
+   JButton Back = new JButton("Back");
    
    JPanel p = new JPanel();
    
@@ -43,11 +47,11 @@ public class CustomerFrame extends JFrame implements ActionListener{
       this.setLocationRelativeTo(null);
       this.setLayout(new BorderLayout());
       this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+      this.setIconImage(img.getImage());
       
       Gender.add(Male);
       Gender.add(Female);
       
-      p.add(label);
       p.add(Name);
       p.add(Age);
       p.add(GLabel);
@@ -56,11 +60,10 @@ public class CustomerFrame extends JFrame implements ActionListener{
       p.add(Address);
       p.add(IdNumber);
       p.add(Save);
-      p.add(Edit);
-      label.setVisible(false);
+      p.add(Back);
       
+      Back.addActionListener(this);
       Save.addActionListener(this);
-      Edit.addActionListener(this);
       
       p.setBounds(340,200, 300, 137);
       p.setLayout(new FlowLayout(1, 20, 10));
@@ -115,50 +118,61 @@ public class CustomerFrame extends JFrame implements ActionListener{
             valid = false;
          }
          
-         
+      
          if (valid) {
-            label.setText("<html>" + customer.toString().replace("\n", "<br>") + "</html>");
-            try
-            {
-               FileWriter fw = new FileWriter(file);
+            try {
+               FileWriter fw = new FileWriter(file, true);
                BufferedWriter bufferedWriter = new BufferedWriter(fw);
                
                fw.write(customer.getName() + "," + customer.getAge() + "," + customer.getGender() + "," + customer.getAddress() + "," + customer.getIdNumber() + "\n");
                bufferedWriter.append(System.getProperty("line.separator"));
-
+            
                fw.close();
                bufferedWriter.close();
-
-               
+            
             }
-         catch(Exception easd)
-         {
-         
-         }
-            toggleVisibility(false); 
-            label.setVisible(true);
-         } else {
-            toggleVisibility(true); 
-            label.setVisible(false);
+            catch(Exception easd){
+            
+            }            
+            
+            CustomerManagementFrame cof = new CustomerManagementFrame();
+            this.dispose();
+         } 
+         else {
          }  
          
                 
       }
       
-      else if(e.getSource() == Edit){
-         toggleVisibility(true); 
-         label.setVisible(false);
+      else if(e.getSource() == Back){
+         int confirm = JOptionPane.showConfirmDialog(
+                  null,
+                  "All data won't be saved, Are you sure you want to go back?",
+                  "V-Lease",
+                  JOptionPane.YES_NO_OPTION
+                  );
+            
+         if (confirm == JOptionPane.YES_OPTION) {
+            CustomerManagementFrame cf = new CustomerManagementFrame();
+            this.dispose();
+         } 
+      }
+      
+   }
+   
+   public void setCustomerData(String name, String age, String gender, String address, String idNumber) {
+      Name.setText(name);
+      Age.setText(age);
+      Address.setText(address);
+      IdNumber.setText(idNumber);
+   
+      if (gender.equalsIgnoreCase("M")) {
+         Male.setSelected(true);
+      } else if (gender.equalsIgnoreCase("F")) {
+         Female.setSelected(true);
       }
    }
-   private void toggleVisibility(boolean isVisible) {
-      Name.setVisible(isVisible);
-      Age.setVisible(isVisible);
-      GLabel.setVisible(isVisible);
-      Male.setVisible(isVisible);
-      Female.setVisible(isVisible);
-      Address.setVisible(isVisible);
-      IdNumber.setVisible(isVisible);
-      Save.setVisible(isVisible);
-   }
+
+
    
 }
